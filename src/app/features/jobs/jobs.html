@@ -1,0 +1,143 @@
+<div class="jobs-page">
+  <div class="page-header">
+    <div>
+      <h1>Jobs</h1>
+      <p>Manage all job openings in HireFlow.</p>
+    </div>
+  </div>
+
+  @if (successMessage()) {
+    <div class="success-message">
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="filters">
+    <div class="search-container">
+      <input
+        type="text"
+        placeholder="Search jobs..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+    </div>
+
+    <div class="filter-container">
+      <label for="status-filter">Status</label>
+
+      <select
+        id="status-filter"
+        [value]="statusFilter()"
+        (change)="statusFilter.set($any($event.target).value)"
+      >
+        <option value="all">All</option>
+        <option value="open">Open</option>
+        <option value="draft">Draft</option>
+        <option value="closed">Closed</option>
+      </select>
+    </div>
+
+    <div class="filter-container">
+      <label for="department-filter">Department</label>
+
+      <select
+        id="department-filter"
+        [value]="departmentFilter()"
+        (change)="departmentFilter.set($any($event.target).value)"
+      >
+        <option value="all">All</option>
+        <option value="Engineering">Engineering</option>
+        <option value="Design">Design</option>
+        <option value="Product">Product</option>
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button type="button" (click)="clearFilters()">Clear Filters</button>
+    </div>
+  </div>
+
+  <p class="result-count">{{ filteredJobs().length }} jobs found</p>
+
+  <div class="jobs-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Department</th>
+          <th>Location</th>
+          <th>Employment Type</th>
+          <th>Experience</th>
+          <th>Status</th>
+          <th>Applicants</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (job of filteredJobs(); track job.id) {
+          <tr>
+            <td class="job-title">{{ job.title }}</td>
+            <td>{{ job.department }}</td>
+            <td>{{ job.location }}</td>
+            <td>{{ job.employmentType | titlecase }}</td>
+            <td>{{ job.experience }}</td>
+
+            <td>
+              <span
+                class="status-badge"
+                [class.status-open]="job.status === 'open'"
+                [class.status-draft]="job.status === 'draft'"
+                [class.status-closed]="job.status === 'closed'"
+              >
+                {{ job.status }}
+              </span>
+            </td>
+
+            <td>{{ job.applicantsCount }}</td>
+
+            <td class="actions">
+              <a [routerLink]="['/jobs', job.id]" class="action-button view-button"> View </a>
+
+              <a [routerLink]="['/jobs', job.id, 'edit']" class="action-button edit-button">
+                Edit
+              </a>
+
+              <button type="button" class="action-button delete-button" (click)="onDelete(job)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="no-results">No jobs found.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (jobToDelete(); as job) {
+    <div class="modal-backdrop">
+      <div class="delete-dialog">
+        <h2>Delete Job?</h2>
+
+        <p>
+          Are you sure you want to delete
+          <strong>{{ job.title }}</strong
+          >?
+        </p>
+
+        <p class="warning-text">This action cannot be undone.</p>
+
+        <div class="dialog-actions">
+          <button type="button" class="cancel-button" (click)="cancelDelete()">Cancel</button>
+
+          <button type="button" class="confirm-delete-button" (click)="confirmDelete()">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

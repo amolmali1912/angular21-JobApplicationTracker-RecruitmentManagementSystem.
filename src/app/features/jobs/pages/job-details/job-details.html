@@ -1,0 +1,70 @@
+@if (job) {
+  <div class="job-details-page">
+    <div class="page-header">
+      <div>
+        <h1>{{ job.title }}</h1>
+        <p>View detailed information about this job.</p>
+      </div>
+    </div>
+
+    <div class="job-details-card">
+      <div class="details-header">
+        <div>
+          <h2>{{ job.title }}</h2>
+          <p>{{ job.department }}</p>
+        </div>
+
+        <span
+          class="status-badge"
+          [class.status-open]="job.status === 'open'"
+          [class.status-draft]="job.status === 'draft'"
+          [class.status-closed]="job.status === 'closed'"
+        >
+          {{ job.status }}
+        </span>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Location</span>
+          <span class="detail-value">{{ job.location }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Employment Type</span>
+          <span class="detail-value">{{ job.employmentType }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Experience</span>
+          <span class="detail-value">{{ job.experience }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Applicants</span>
+          <span class="detail-value">{{ job.applicantsCount }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Posted Date</span>
+          <span class="detail-value">
+            {{ job.postedDate | date: 'dd MMM yyyy' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Job ID</span>
+          <span class="detail-value">{{ job.id }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="job-not-found">
+    <h2>Job Not Found</h2>
+
+    <p>The job you are looking for does not exist or may have been removed.</p>
+
+    <a routerLink="/jobs" class="back-button"> Back to Jobs </a>
+  </div>
+}
