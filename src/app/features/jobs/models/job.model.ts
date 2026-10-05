@@ -13,3 +13,8 @@ export interface Job {
   applicantsCount: number;
   postedDate: string;
 }
+
+export type JobFormValue = Pick<
+  Job,
+  'title' | 'department' | 'location' | 'employmentType' | 'experience' | 'status'
+>;

@@ -1,0 +1,12 @@
+<div class="job-create-page">
+  <div class="page-header">
+    <div>
+      <h1>Create Job</h1>
+      <p>Create a new job opening.</p>
+    </div>
+  </div>
+
+  <div class="job-form-card">
+    <app-job-form (formSubmitted)="onFormSubmitted($event)" (cancelled)="onCancel()" />
+  </div>
+</div>

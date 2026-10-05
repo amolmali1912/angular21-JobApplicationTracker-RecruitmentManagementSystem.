@@ -253,3 +253,26 @@ tbody tr:last-child td {
 .confirm-delete-button:hover {
   background: #b91c1c;
 }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.create-job-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.create-job-button:hover {
+  background: #1d4ed8;
+}

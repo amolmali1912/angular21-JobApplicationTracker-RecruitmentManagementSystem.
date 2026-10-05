@@ -47,4 +47,11 @@ export class JobsService {
 
     return true;
   }
+
+  createJob(job: Job): Job {
+    MOCK_JOBS.unshift(job); // we want newly added job should be displayed at first order hence using 'unshift' method
+    // MOCK_JOBS.push(job); // if we want newly added job should be displayed in last then use 'push' method
+
+    return job;
+  }
 }

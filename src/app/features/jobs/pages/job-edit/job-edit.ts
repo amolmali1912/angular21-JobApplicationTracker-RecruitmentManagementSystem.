@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Job, JobFormValue } from '../../models/job.model';
+import { JobForm } from '../../components/job-form/job-form';
 import { JobsService } from '../../services/jobs.service';
 
 @Component({
   selector: 'app-job-edit',
-  imports: [ReactiveFormsModule],
+  imports: [JobForm],
   templateUrl: './job-edit.html',
   styleUrl: './job-edit.scss',
 })
@@ -14,55 +15,33 @@ export class JobEdit {
   private readonly jobsService = inject(JobsService);
   private readonly router = inject(Router);
 
-  private readonly jobId = this.route.snapshot.paramMap.get('id') ?? '';
-
-  protected readonly jobForm = new FormGroup({
-    title: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-
-    department: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-
-    location: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-  });
+  protected readonly initialValue: JobFormValue | undefined;
 
   constructor() {
-    // const jobId = this.route.snapshot.paramMap.get('id');
+    const jobId = this.route.snapshot.paramMap.get('id');
 
-    const job = this.jobsService.getJobById(this.jobId ?? '');
+    const job = this.jobsService.getJobById(jobId ?? '');
 
     if (job) {
-      this.jobForm.patchValue({
+      this.initialValue = {
         title: job.title,
         department: job.department,
         location: job.location,
-      });
+        employmentType: job.employmentType,
+        experience: job.experience,
+        status: job.status,
+      };
     }
   }
 
-  protected onSubmit(): void {
-    if (this.jobForm.invalid) {
-      this.jobForm.markAllAsTouched();
+  protected onFormSubmitted(formValue: JobFormValue): void {
+    const jobId = this.route.snapshot.paramMap.get('id');
+
+    if (!jobId) {
       return;
     }
 
-    // const jobId = this.route.snapshot.paramMap.get('id');
-
-    if (!this.jobId) {
-      return;
-    }
-
-    console.log('this.jobForm.getRawValue()');
-    console.log(this.jobForm.getRawValue());
-
-    const updatedJob = this.jobsService.updateJob(this.jobId, this.jobForm.getRawValue());
+    const updatedJob = this.jobsService.updateJob(jobId, formValue);
 
     if (!updatedJob) {
       return;
@@ -73,7 +52,6 @@ export class JobEdit {
         message: 'Job updated successfully.',
       },
     });
-    console.log('Updated Job:', updatedJob);
   }
 
   protected onCancel(): void {

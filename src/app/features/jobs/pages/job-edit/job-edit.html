@@ -7,53 +7,12 @@
   </div>
 
   <div class="job-form-card">
-    <form [formGroup]="jobForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="title">Job Title</label>
-
-        <input id="title" type="text" formControlName="title" placeholder="Enter job title" />
-
-        @if (jobForm.controls.title.touched && jobForm.controls.title.hasError('required')) {
-          <small class="error-message"> Job title is required. </small>
-        }
-
-        @if (jobForm.controls.title.touched && jobForm.controls.title.hasError('minlength')) {
-          <small class="error-message"> Job title must be at least 3 characters. </small>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="department">Department</label>
-
-        <input
-          id="department"
-          type="text"
-          formControlName="department"
-          placeholder="Enter department"
-        />
-
-        @if (
-          jobForm.controls.department.touched && jobForm.controls.department.hasError('required')
-        ) {
-          <small class="error-message"> Department is required. </small>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="location">Location</label>
-
-        <input id="location" type="text" formControlName="location" placeholder="Enter location" />
-
-        @if (jobForm.controls.location.touched && jobForm.controls.location.hasError('required')) {
-          <small class="error-message"> Location is required. </small>
-        }
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
-
-        <button type="submit" class="save-button">Save Changes</button>
-      </div>
-    </form>
+    @if (initialValue) {
+      <app-job-form
+        [initialValue]="initialValue"
+        (formSubmitted)="onFormSubmitted($event)"
+        (cancelled)="onCancel()"
+      />
+    }
   </div>
 </div>
